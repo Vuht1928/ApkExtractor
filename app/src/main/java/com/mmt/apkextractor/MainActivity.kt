@@ -11,11 +11,29 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.mmt.apkextractor.ui.theme.ApkExtractorTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        splashScreen.apply {
+            var keepOnScreen = true
+            lifecycleScope.launch {
+                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    // TODO: Cần update
+                    /*model.keepSplashScreen.collect {
+                        keepOnScreen = it
+                    }*/
+                }
+            }
+            setKeepOnScreenCondition { keepOnScreen }
+        }
         enableEdgeToEdge()
         setContent {
             ApkExtractorTheme {
